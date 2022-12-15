@@ -1,5 +1,7 @@
 using Core;
+using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Service;
 
 namespace LojaAPI
 {
@@ -19,6 +21,9 @@ namespace LojaAPI
             builder.Services.AddDbContext<LojaContext>(
                 options => options.UseSqlServer(builder.Configuration.GetConnectionString("LojaDatabase"))
                 );
+
+            builder.Services.AddScoped<ICategoria, CategoriaService>();
+            builder.Services.AddScoped<IProduto, ProdutoService>();
 
             var app = builder.Build();
 
