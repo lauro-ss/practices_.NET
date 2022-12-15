@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LojaAPI", "LojaAPI\LojaAPI.csproj", "{EC7B395C-0E1C-4342-AE92-7213AD56D25C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{0617F57D-5617-4B69-9DAE-410E9B27A8F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{35794B9B-ED52-4452-9BAC-49F9E464239A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC7B395C-0E1C-4342-AE92-7213AD56D25C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC7B395C-0E1C-4342-AE92-7213AD56D25C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC7B395C-0E1C-4342-AE92-7213AD56D25C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC7B395C-0E1C-4342-AE92-7213AD56D25C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0617F57D-5617-4B69-9DAE-410E9B27A8F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0617F57D-5617-4B69-9DAE-410E9B27A8F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0617F57D-5617-4B69-9DAE-410E9B27A8F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0617F57D-5617-4B69-9DAE-410E9B27A8F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35794B9B-ED52-4452-9BAC-49F9E464239A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35794B9B-ED52-4452-9BAC-49F9E464239A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35794B9B-ED52-4452-9BAC-49F9E464239A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35794B9B-ED52-4452-9BAC-49F9E464239A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4016389A-05F2-402D-A1F2-91BD45B3ECD0}
+	EndGlobalSection
+EndGlobal
