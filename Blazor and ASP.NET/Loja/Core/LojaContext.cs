@@ -12,7 +12,7 @@ namespace Core
         }
 
         public DbSet<Produto> Produto { get; set; }
-        public DbSet<Produto> Categoria { get; set; }
+        public DbSet<Categoria> Categoria { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
