@@ -15,7 +15,14 @@ namespace View.Service
 
         public async Task<IEnumerable<Categoria>> Get()
         {
-            var result = await _httpClient.GetFromJsonAsync<Categoria[]>("/api/categoria");
+            /*var options = new JsonSerializerOptions()
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+                PropertyNameCaseInsensitive = true
+            };*/
+
+            var result = await _httpClient.GetFromJsonAsync<IEnumerable<Categoria>>("/api/categoria");
+
             return result;
         }
     }

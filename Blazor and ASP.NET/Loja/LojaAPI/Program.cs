@@ -25,6 +25,13 @@ namespace LojaAPI
             builder.Services.AddScoped<ICategoria, CategoriaService>();
             builder.Services.AddScoped<IProduto, ProdutoService>();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllowBlazorOrigin",
+                    builder => { builder.WithOrigins("https://localhost:7229", "http://localhost:5229"); }
+                        );
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -35,6 +42,8 @@ namespace LojaAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowBlazorOrigin");
 
             app.UseAuthorization();
 
