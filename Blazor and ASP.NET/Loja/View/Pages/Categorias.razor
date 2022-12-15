@@ -1,0 +1,51 @@
+﻿@page "/Categorias"
+@using Core
+@using View.Service
+@using View.Service.Interfaces
+@inject ICategoriaService _categoriaService
+
+<PageTitle>Categorias</PageTitle>
+
+<h3>Categorias</h3>
+@if(data == null)
+{
+    <h4>Carregando...</h4>
+}else
+{
+    @if(data.Any())
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Subcategoria_1</th>
+                    <th>Subcategoria_2</th>
+                    <th>Subcategoria_3</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in data)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Nome</td>
+                        <td>@item.Subcategoria_1</td>
+                        <td>@item.Subcategoria_2</td>
+                        <td>@item.Subcategoria_3</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    private IEnumerable<Categoria> data = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        data = await _categoriaService.Get();
+    }
+}
