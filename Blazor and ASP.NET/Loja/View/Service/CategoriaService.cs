@@ -13,17 +13,32 @@ namespace View.Service
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<Categoria>> Get()
+        public async Task<Categoria> Create(Categoria categoria)
         {
-            /*var options = new JsonSerializerOptions()
-            {
-                ReferenceHandler = ReferenceHandler.Preserve,
-                PropertyNameCaseInsensitive = true
-            };*/
+            var response = await _httpClient.PostAsJsonAsync("/api/categoria/", categoria);
+            return await response.Content.ReadFromJsonAsync<Categoria>();
+        }
 
-            var result = await _httpClient.GetFromJsonAsync<IEnumerable<Categoria>>("/api/categoria");
+        public async Task<bool> Delete(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"/api/categoria/{id}");
+            return await response.Content.ReadFromJsonAsync<bool>();
+        }
 
-            return result;
+        public async Task<Categoria> Edit(Categoria categoria)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"/api/categoria/{categoria.Id}", categoria);
+            return await response.Content.ReadFromJsonAsync<Categoria>();
+        }
+
+        public async Task<Categoria> Get(int id)
+        {
+            return await _httpClient.GetFromJsonAsync<Categoria>($"/api/categoria/{id}");
+        }
+
+        public async Task<IEnumerable<Categoria>> GetAll()
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<Categoria>>("/api/categoria");
         }
     }
 }
