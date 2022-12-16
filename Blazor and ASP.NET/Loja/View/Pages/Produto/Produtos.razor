@@ -1,9 +1,56 @@
 ﻿@page "/produtos"
+@using Core
+@using View.Service
+@using View.Service.Interfaces
+@inject IProdutoService _produtoService
 
 <PageTitle>Produtos</PageTitle>
 
 <h3>Produtos</h3>
+@if (data == null)
+{
+    <h4>Carregando...</h4>
+}
+else
+{
+    @if (data.Any())
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Quantidade</th>
+                    <th>Categoria</th>
+                    <th>Subcategoria</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in data)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Nome</td>
+                        <td>@item.Valor</td>
+                        <td>@item.Status</td>
+                        <td>@item.Quantidade</td>
+                        <td>@item.IdCategoria</td>
+                        <td>@item.Subcategoria</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
 
 @code {
+    private IEnumerable<Produto>? data = null;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        data = await _produtoService.GetAll();
+    }
 }

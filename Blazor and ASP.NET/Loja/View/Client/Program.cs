@@ -16,6 +16,7 @@ namespace View
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7088/") });
 
             builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+            builder.Services.AddScoped<IProdutoService, ProdutoService>();
 
             await builder.Build().RunAsync();
         }

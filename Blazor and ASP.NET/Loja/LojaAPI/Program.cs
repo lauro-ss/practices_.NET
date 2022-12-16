@@ -28,7 +28,11 @@ namespace LojaAPI
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: "AllowBlazorOrigin",
-                    builder => { builder.WithOrigins("https://localhost:7229", "http://localhost:5229"); }
+                    policy =>
+                    {
+                        policy.WithOrigins("https://localhost:7229", "http://localhost:5229")
+                        .AllowAnyHeader();
+                    }
                         );
             });
 

@@ -1,0 +1,39 @@
+﻿@page "/CadastroCategoria"
+@using Core
+@using View.Service
+@using View.Service.Interfaces
+@inject ICategoriaService _categoriaService
+@inject NavigationManager NavManager
+
+<h3>Cadastro de Categoria</h3>
+
+<EditForm Model="@categoria" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    
+    <div>
+        <label for="nome" class="control-label fs-5 mb-2">Nome</label>
+        <InputText id="nome" @bind-Value="categoria.Nome" class="mb-4 form-control" />
+    </div>
+    <div class="form-group">
+        <label for="subcategoria_1" class="control-label fs-5 mb-2">Subcategorias</label>
+        <InputText id="subcategoria_1" @bind-Value="categoria.Subcategoria_1" class="mb-4 form-control" />
+        <InputText id="subcategoria_2" @bind-Value="categoria.Subcategoria_2" class="mb-4 form-control" />
+        <InputText id="subcategoria_3" @bind-Value="categoria.Subcategoria_3" class="mb-4 form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+</EditForm>
+
+@code {
+    private Categoria categoria = new Categoria();
+
+    private async void HandleValidSubmit()
+    {
+        var result = await _categoriaService.Create(categoria);
+        if(result != null)
+            NavManager.NavigateTo("/Categorias");
+        else
+            NavManager.NavigateTo("/CadastroCategoria");
+    }
+}
