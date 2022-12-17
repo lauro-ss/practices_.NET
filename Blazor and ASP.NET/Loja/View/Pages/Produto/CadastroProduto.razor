@@ -1,0 +1,113 @@
+﻿@page "/CadastroProduto"
+@using Core
+@using View.Service
+@using View.Service.Interfaces
+@using Core.Enums
+@inject IProdutoService _produtoService
+@inject ICategoriaService _categoriaService
+@inject NavigationManager NavManager
+
+<h3>Cadastro de Produto</h3>
+
+
+<EditForm Model="@produto" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="nome" class="control-label fs-5 mb-2">Nome</label>
+        <InputText id="nome" @bind-Value="produto.Nome" class="mb-4 form-control" />
+    </div>
+
+    <div>
+        <label for="valor" class="control-label fs-5 mb-2">Valor</label>
+        <InputNumber id="valor" @bind-Value="produto.Valor" class="mb-4 form-control" step="0.01" />
+    </div>
+
+    <div>
+        <label for="status" class="control-label fs-5 mb-2">Status</label>
+        <InputSelect id="status" @bind-Value="produto.Status" class="mb-4 form-control" >
+            @foreach (var status in Enum.GetValues(typeof(StatusProduto)))
+            {
+                <option value="@status">@status</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div>
+        <label for="quantidade" class="control-label fs-5 mb-2">Quantidade</label>
+        <InputNumber id="quantidade" @bind-Value="produto.Quantidade" class="mb-4 form-control" min="1"/>
+    </div>
+
+    <div>
+        <label for="categoria" class="control-label fs-5 mb-2">Categoria</label>
+        <InputSelect id="categoria" @bind-Value="produto.IdCategoria" class="mb-4 form-control" oninput="@GetSubcategorias">
+            <option value="0">Selecione uma categoria</option>
+            @if(categorias != null)
+                @foreach (var categoria in categorias)
+                {
+                    <option value="@categoria.Id">@categoria.Nome</option>
+                }
+        </InputSelect>
+    </div>
+
+    <div>
+        <label for="subcategoria" class="control-label fs-5 mb-2">Subcategoria</label>
+        <InputSelect id="subcategoria" @bind-Value="produto.Subcategoria" class="mb-4 form-control">
+            <option value="">Selecione uma subcategoria</option>
+            @if (subCategorias != null)
+                @foreach (var subCategoria in subCategorias)
+                {
+                    <option value="@subCategoria">@subCategoria</option>
+                }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+</EditForm>
+
+@code {
+    private Produto produto = new Produto();
+    private IEnumerable<Categoria> categorias;
+    private List<string> subCategorias = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        //produto.Subcategoria = "0";
+        categorias = await _categoriaService.GetAll();
+    }
+
+    private async void HandleValidSubmit()
+    {
+        var result = _produtoService.Create(produto);
+        if (result != null)
+            NavManager.NavigateTo("/Produtos");
+        else
+            NavManager.NavigateTo("/CadastroProduto");
+    }
+
+    private async void GetSubcategorias(ChangeEventArgs e)
+    {
+
+        if (e.Value != null)
+        {
+            int value;
+            value = Convert.ToInt32(e.Value);
+            
+            if (subCategorias != null)
+                subCategorias.Clear();
+
+            if (value != 0)
+            {
+                string subcategoria_1 = categorias.FirstOrDefault(x => x.Id.Equals(value)).Subcategoria_1;
+                string subcategoria_2 = categorias.FirstOrDefault(x => x.Id.Equals(value)).Subcategoria_2;
+                string subcategoria_3 = categorias.FirstOrDefault(x => x.Id.Equals(value)).Subcategoria_3;
+                subCategorias.Add(subcategoria_1);
+                if (subcategoria_2 != null)
+                    subCategorias.Add(subcategoria_2);
+                if (subcategoria_3 != null)
+                    subCategorias.Add(subcategoria_3);
+            }
+        }
+    }
+}
