@@ -10,7 +10,7 @@ namespace Core.Enums
         Vencido = 1,
         [Description("Danificado")]
         Danificado = 2,
-        [Description("Em Falta")]
-        EmFalta = 3
+        [Description("Esgotado")]
+        Esgotado = 3
     }
 }
