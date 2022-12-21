@@ -1,5 +1,6 @@
 # Comandos
 ## Miggratiosn
+Entity Framework 6-*
 ```Add-Migration [nome-arquivo] -Context [context-class]```
 ## Update Database
 Entity Framework 6-*
