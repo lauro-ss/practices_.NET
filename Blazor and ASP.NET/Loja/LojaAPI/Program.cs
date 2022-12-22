@@ -31,7 +31,8 @@ namespace LojaAPI
                     policy =>
                     {
                         policy.WithOrigins("https://localhost:7229", "http://localhost:5229")
-                        .AllowAnyHeader();
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                     }
                         );
             });

@@ -1,5 +1,6 @@
 ﻿@page "/produtos"
 @inject IProdutoService _produtoService
+@inject NavigationManager NavManager
 
 <PageTitle>Produtos</PageTitle>
 
@@ -35,6 +36,7 @@ else
                         <td>@item.Quantidade</td>
                         <td>@item.IdCategoria</td>
                         <td>@item.Subcategoria</td>
+                        <td><button @onclick="() => EditarProduto(item.Id)">Editar</button></td>
                     </tr>
                 }
             </tbody>
@@ -44,6 +46,11 @@ else
 
 @code {
     private IEnumerable<Produto>? data = null;
+
+    private async Task EditarProduto(int id)
+    {
+        NavManager.NavigateTo($"/EditarProduto/{id}");
+    }
 
     protected override async Task OnInitializedAsync()
     {
