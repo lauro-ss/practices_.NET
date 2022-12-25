@@ -37,6 +37,7 @@ else
                         <td>@item.IdCategoria</td>
                         <td>@item.Subcategoria</td>
                         <td><button @onclick="() => EditarProduto(item.Id)">Editar</button></td>
+                        <td><button @onclick="() => RemoverProduto(item.Id)">Remover</button></td>
                     </tr>
                 }
             </tbody>
@@ -52,9 +53,18 @@ else
         NavManager.NavigateTo($"/EditarProduto/{id}");
     }
 
+    private async Task RemoverProduto(int id)
+    {
+        await _produtoService.Delete(id);
+        data = await _produtoService.GetAll();
+        await InvokeAsync(() =>
+        {
+          StateHasChanged();
+        });
+    }
+
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
         data = await _produtoService.GetAll();
     }
 }
