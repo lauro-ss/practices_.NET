@@ -37,7 +37,7 @@ else
                         <td>@item.IdCategoria</td>
                         <td>@item.Subcategoria</td>
                         <td><button @onclick="() => EditarProduto(item.Id)">Editar</button></td>
-                        <td><button @onclick="() => RemoverProduto(item.Id)">Remover</button></td>
+                        <td><button @onclick="() => RemoverProduto(item.Id, item.Nome)">Remover</button></td>
                     </tr>
                 }
             </tbody>
@@ -45,21 +45,59 @@ else
     }
 }
 
+@if(modal){
+    <div class="modal" tabindex="-1" style="display:block">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Remover produto</h5>
+               <button type="button" class="btn-close" @onclick="CloseModal"></button>
+          </div>
+          <div class="modal-body">
+            <p>Tem certeza que deseja remover o produto: @nomeProduto?</p>
+          </div>
+          <div class="modal-footer">
+             <button type="button" class="btn btn-secondary" @onclick="CloseModal">Fechar</button>
+             <button type="button" class="btn btn-danger" @onclick="RemoverProduto">Remover</button>
+          </div>
+        </div>
+      </div>
+    </div>
+}
+
 @code {
     private IEnumerable<Produto>? data = null;
+    private bool modal = false;
+    private int idProduto = 0;
+    private string nomeProduto = "";
 
     private async Task EditarProduto(int id)
     {
         NavManager.NavigateTo($"/EditarProduto/{id}");
     }
 
-    private async Task RemoverProduto(int id)
+    private async Task CloseModal()
     {
-        await _produtoService.Delete(id);
+        modal = false;
+    }
+
+    private async Task RemoverProduto(int id, string nome)
+    {
+        modal = true;
+        idProduto = id;
+        nomeProduto = nome;
+    }
+
+    private async Task RemoverProduto()
+    {
+        await _produtoService.Delete(idProduto);
         data = await _produtoService.GetAll();
         await InvokeAsync(() =>
         {
-          StateHasChanged();
+            StateHasChanged();
+            modal = false;
+            idProduto = 0;
+            nomeProduto = "";
         });
     }
 
