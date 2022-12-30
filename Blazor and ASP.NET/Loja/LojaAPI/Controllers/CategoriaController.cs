@@ -20,35 +20,82 @@ namespace LojaAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Categoria>>> Get()
         {
-            return Ok(await _categoriaService.GetAll());
+            try
+            {
+                return Ok(await _categoriaService.GetAll());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Erro interno: {e.Message}");
+            }
+
         }
 
         // GET api/<CategoriaController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Categoria>> Get(int id)
         {
-            return Ok(await _categoriaService.Get(id));
+            try
+            {
+                return Ok(await _categoriaService.Get(id));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Erro interno: {e.Message}");
+            }
+
         }
 
         // POST api/<CategoriaController>
         [HttpPost]
         public async Task<ActionResult<Categoria>> Post([FromBody] Categoria categoria)
         {
-            return Ok(await _categoriaService.Create(categoria));
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Ausência de informações para categoria");
+                }
+                return Ok(await _categoriaService.Create(categoria));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Erro interno: {e.Message}");
+            }
         }
 
         // PUT api/<CategoriaController>/5
         [HttpPut("{id}")]
         public async Task<ActionResult<Categoria>> Put(int id, [FromBody] Categoria categoria)
         {
-            return Ok(await _categoriaService.Edit(categoria, id));
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Ausência de informações para categoria");
+                }
+                return Ok(await _categoriaService.Edit(categoria, id));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Erro interno: {e.Message}");
+            }
+
         }
 
         // DELETE api/<CategoriaController>/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> Delete(int id)
         {
-            return Ok(await _categoriaService.Delete(id));
+            try
+            {
+                return Ok(await _categoriaService.Delete(id));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Erro interno: {e.Message}");
+            }
+
         }
     }
 }

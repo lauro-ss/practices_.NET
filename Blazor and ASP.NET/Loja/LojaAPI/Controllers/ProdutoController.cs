@@ -19,35 +19,83 @@ namespace LojaAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Produto>>> Get()
         {
-            return Ok(await _produtoService.GetAll());
+            try
+            {
+                return Ok(await _produtoService.GetAll());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Erro interno: {e.Message}");
+            }
+
         }
 
         // GET api/<ProdutoController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Produto>> Get(int id)
         {
-            return Ok(await _produtoService.Get(id));
+            try
+            {
+                return Ok(await _produtoService.Get(id));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Erro interno: {e.Message}");
+            }
+
         }
 
         // POST api/<ProdutoController>
         [HttpPost]
         public async Task<ActionResult<Produto>> Post([FromBody] Produto produto)
         {
-            return Ok(await _produtoService.Create(produto));
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Ausência de informações para produto");
+                }
+                return Ok(await _produtoService.Create(produto));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Erro interno: {e.Message}");
+            }
+
         }
 
         // PUT api/<ProdutoController>/5
         [HttpPut("{id}")]
         public async Task<ActionResult<Produto>> Put(int id, [FromBody] Produto produto)
         {
-            return Ok(await _produtoService.Edit(produto, id));
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Ausência de informações para produto");
+                }
+                return Ok(await _produtoService.Edit(produto, id));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Erro interno: {e.Message}");
+            }
+
         }
 
         // DELETE api/<ProdutoController>/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> Delete(int id)
         {
-            return Ok(await _produtoService.Delete(id));
+            try
+            {
+                return Ok(await _produtoService.Delete(id));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Erro interno: {e.Message}");
+            }
+
         }
     }
 }
