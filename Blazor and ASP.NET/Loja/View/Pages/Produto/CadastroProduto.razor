@@ -13,17 +13,21 @@
 
     <div>
         <label for="nome" class="control-label fs-5 mb-2">Nome</label>
-        <InputText id="nome" @bind-Value="produto.Nome" class="mb-4 form-control" />
+        <div class="mb-4">
+            <InputText id="nome" @bind-Value="produto.Nome" class="form-control" />
+            <!-- <ValidationMessage For="@(() => produto.Nome)" /> -->
+        </div>
     </div>
 
     <div>
         <label for="valor" class="control-label fs-5 mb-2">Valor</label>
-        <InputNumber id="valor" @bind-Value="produto.Valor" class="mb-4 form-control" step="0.01" min="0.01"/>
+        <InputNumber id="valor" @bind-Value="produto.Valor" class="mb-4 form-control" step="0.01"/>
     </div>
 
     <div>
         <label for="status" class="control-label fs-5 mb-2">Status</label>
         <InputSelect id="status" @bind-Value="produto.Status" class="mb-4 form-control" >
+            <option value="0">Selecione um status</option>
             @foreach (var status in Enum.GetValues(typeof(StatusProduto)))
             {
                 <option value="@status">@status</option>
@@ -33,7 +37,7 @@
 
     <div>
         <label for="quantidade" class="control-label fs-5 mb-2">Quantidade</label>
-        <InputNumber id="quantidade" @bind-Value="produto.Quantidade" class="mb-4 form-control" min="1"/>
+        <InputNumber id="quantidade" @bind-Value="produto.Quantidade" class="mb-4 form-control"/>
     </div>
 
     <div>
