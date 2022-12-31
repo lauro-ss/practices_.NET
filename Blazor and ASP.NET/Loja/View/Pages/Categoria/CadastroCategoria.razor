@@ -1,5 +1,4 @@
 ﻿@page "/CadastroCategoria"
-@inject ICategoriaService _categoriaService
 @inject NavigationManager NavManager
 
 <h3>Cadastro de Categoria</h3>
@@ -23,14 +22,14 @@
 </EditForm>
 
 @code {
-    private Categoria categoria = new Categoria();
+    [Parameter]
+    public Categoria categoria { get; set; }
+
+    [Parameter]
+    public Action ValidSubmit { get; set; }
 
     private async void HandleValidSubmit()
     {
-        var result = await _categoriaService.Create(categoria);
-        if(result != null)
-            NavManager.NavigateTo("/Categorias");
-        else
-            NavManager.NavigateTo("/CadastroCategoria");
+        ValidSubmit?.Invoke();
     }
 }

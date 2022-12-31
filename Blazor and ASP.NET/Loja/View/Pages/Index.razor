@@ -1,9 +1,58 @@
 ﻿@page "/"
+@using View.Pages.Produto
+@using View.Pages.Categoria
+@inject IProdutoService _produtoService
+@inject ICategoriaService _categoriaService
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="d-flex justify-content-around flex-wrap" style="column-gap: 30px;">
+    <div class="flex-fill">
+        <CadastroCategoria ValidSubmit="HandleValidSubmitCategoria" categoria="auxCategoria"></CadastroCategoria>
+    </div>
+    <div class="flex-fill">
+        <CadastroProduto ValidSubmit="HandleValidSubmitProduto" produto="auxProduto" categorias="auxCategorias"></CadastroProduto>
+    </div>
+</div>
 
-Welcome to your new app.
+<Produtos data="dataProduto"></Produtos>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code{
+    private IEnumerable<Core.Produto>? dataProduto { get; set; }
+    private Core.Produto auxProduto = new Core.Produto();
+    private Core.Categoria auxCategoria = new Core.Categoria();
+    private IEnumerable<Core.Categoria> auxCategorias { get; set; }
+
+    public async void HandleValidSubmitProduto()
+    {
+        var result = _produtoService.Create(auxProduto);
+        dataProduto = await _produtoService.GetAll();
+        auxProduto = new Core.Produto();
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    private async void HandleValidSubmitCategoria()
+    {
+        var result = await _categoriaService.Create(auxCategoria);
+        auxCategoria = new Core.Categoria();
+        auxCategorias = await _categoriaService.GetAll();
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        dataProduto = await _produtoService.GetAll();
+        auxCategorias = await _categoriaService.GetAll();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        dataProduto = await _produtoService.GetAll();
+        auxCategorias = await _categoriaService.GetAll();
+    }
+}

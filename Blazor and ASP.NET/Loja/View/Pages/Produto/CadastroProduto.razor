@@ -7,7 +7,7 @@
 <h3>Cadastro de Produto</h3>
 
 
-<EditForm Model="@produto" OnValidSubmit="@HandleValidSubmit">
+<EditForm Model="@produto" OnValidSubmit="@InvokeHandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -64,23 +64,18 @@
 </EditForm>
 
 @code {
-    private Produto produto = new Produto();
-    private IEnumerable<Categoria> categorias;
+    [Parameter]
+    public Produto produto { get; set; }
+    [Parameter]
+    public IEnumerable<Categoria> categorias { get; set; }
     private List<string> subCategorias = new List<string>();
 
-    protected override async Task OnInitializedAsync()
-    {
-        //produto.Subcategoria = "0";
-        categorias = await _categoriaService.GetAll();
-    }
+    [Parameter]
+    public Action ValidSubmit { get; set; }
 
-    private async void HandleValidSubmit()
+    public async void InvokeHandleValidSubmit()
     {
-        var result = _produtoService.Create(produto);
-        if (result != null)
-            NavManager.NavigateTo("/Produtos");
-        else
-            NavManager.NavigateTo("/CadastroProduto");
+        ValidSubmit?.Invoke();
     }
 
     private async void GetSubcategorias(ChangeEventArgs e)
