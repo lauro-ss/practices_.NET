@@ -5,12 +5,12 @@ namespace Core.Enums
     public enum StatusProduto
     {
         [Description("Normal")]
-        Normal = 0,
+        Normal = 1,
         [Description("Vencido")]
-        Vencido = 1,
+        Vencido = 2,
         [Description("Danificado")]
-        Danificado = 2,
+        Danificado = 3,
         [Description("Esgotado")]
-        Esgotado = 3
+        Esgotado = 4
     }
 }
