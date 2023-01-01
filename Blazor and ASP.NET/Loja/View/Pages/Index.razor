@@ -25,7 +25,7 @@
 
     public async void HandleValidSubmitProduto()
     {
-        var result = _produtoService.Create(auxProduto);
+        var result = await _produtoService.Create(auxProduto);
         dataProduto = await _produtoService.GetAll();
         auxProduto = new Core.Produto();
         await InvokeAsync(() =>
@@ -45,11 +45,11 @@
         });
     }
 
-    protected override async Task OnParametersSetAsync()
+    /*protected override async Task OnParametersSetAsync()
     {
         dataProduto = await _produtoService.GetAll();
         auxCategorias = await _categoriaService.GetAll();
-    }
+    }*/
     protected override async Task OnInitializedAsync()
     {
         dataProduto = await _produtoService.GetAll();

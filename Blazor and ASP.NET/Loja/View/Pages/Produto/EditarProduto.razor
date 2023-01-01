@@ -4,73 +4,88 @@
 @inject ICategoriaService _categoriaService
 @inject NavigationManager NavManager
 
-<h3>Editar Produto</h3>
 @if(produto == null)
 {
     <div> Carregando... </div>
 }
 else
 {
+    
     <EditForm Model="@produto" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+        <div class="modal-body">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-        <div>
-            <label for="nome" class="control-label fs-5 mb-2">Nome</label>
-            <InputText id="nome" @bind-Value="produto.Nome" class="mb-4 form-control" />
-        </div>
+            <div>
+                <label for="nome" class="control-label fs-5 mb-2">Nome</label>
+                <InputText id="nome" @bind-Value="produto.Nome" class="mb-4 form-control" />
+            </div>
 
-        <div>
-            <label for="valor" class="control-label fs-5 mb-2">Valor</label>
-            <InputNumber id="valor" @bind-Value="produto.Valor" class="mb-4 form-control" step="0.01" />
-        </div>
+            <div>
+                <label for="valor" class="control-label fs-5 mb-2">Valor</label>
+                <InputNumber id="valor" @bind-Value="produto.Valor" class="mb-4 form-control" step="0.01" />
+            </div>
 
-        <div>
-            <label for="status" class="control-label fs-5 mb-2">Status</label>
-            <InputSelect id="status" @bind-Value="produto.Status" class="mb-4 form-control" >
-                @foreach (var status in Enum.GetValues(typeof(StatusProduto)))
-                {
-                        <option value="@status">@status</option>
-                }
-            </InputSelect>
-        </div>
-
-        <div>
-            <label for="quantidade" class="control-label fs-5 mb-2">Quantidade</label>
-            <InputNumber id="quantidade" @bind-Value="produto.Quantidade" class="mb-4 form-control" min="1"/>
-        </div>
-
-        <div>
-            <label for="categoria" class="control-label fs-5 mb-2">Categoria</label>
-            <InputSelect id="categoria" @bind-Value="produto.IdCategoria" class="mb-4 form-control" oninput="@GetSubcategorias">
-                <option value="0">Selecione uma categoria</option>
-                @if (categorias != null)
-                    @foreach (var categoria in categorias)
+            <div>
+                <label for="status" class="control-label fs-5 mb-2">Status</label>
+                <InputSelect id="status" @bind-Value="produto.Status" class="mb-4 form-control" >
+                    <option value="0">Selecione um status</option>
+                    @foreach (var status in Enum.GetValues(typeof(StatusProduto)))
                     {
-                                <option value="@categoria.Id">@categoria.Nome</option>
+                            <option value="@status">@status</option>
                     }
-            </InputSelect>
-        </div>
+                </InputSelect>
+            </div>
 
-        <div>
-            <label for="subcategoria" class="control-label fs-5 mb-2">Subcategoria</label>
-            <InputSelect id="subcategoria" @bind-Value="produto.Subcategoria" class="mb-4 form-control">
-                <option value="">Selecione uma subcategoria</option>
-                @if (subCategorias != null)
-                    @foreach (var subCategoria in subCategorias)
-                    {
-                                <option value="@subCategoria">@subCategoria</option>
-                    }
-            </InputSelect>
-        </div>
+            <div>
+                <label for="quantidade" class="control-label fs-5 mb-2">Quantidade</label>
+                <InputNumber id="quantidade" @bind-Value="produto.Quantidade" class="mb-4 form-control" min="1"/>
+            </div>
 
-        <button type="submit" class="btn btn-primary">Salvar</button>
+            <div>
+                <label for="categoria" class="control-label fs-5 mb-2">Categoria</label>
+                <InputSelect id="categoria" @bind-Value="produto.IdCategoria" class="mb-4 form-control" oninput="@GetSubcategorias">
+                    <option value="0">Selecione uma categoria</option>
+                    @if (categorias != null)
+                        @foreach (var categoria in categorias)
+                        {
+                                    <option value="@categoria.Id">@categoria.Nome</option>
+                        }
+                </InputSelect>
+            </div>
+
+            <div>
+                <label for="subcategoria" class="control-label fs-5 mb-2">Subcategoria</label>
+                <InputSelect id="subcategoria" @bind-Value="produto.Subcategoria" class="mb-4 form-control">
+                    <option value="">Selecione uma subcategoria</option>
+                    @if (subCategorias != null)
+                        @foreach (var subCategoria in subCategorias)
+                        {
+                                    <option value="@subCategoria">@subCategoria</option>
+                        }
+                </InputSelect>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @onclick="CloseModel">Fechar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
     </EditForm>
 }
 
 @code {
-    [Parameter]
+    //for url parameter
+    /*[Parameter]
     public string Id { get; set; }
+    */
+    [Parameter]
+    public int Id { get; set; }
+
+    [Parameter]
+    public EventCallback<Produto> OnEditSubmit { get; set; }
+
+    [Parameter]
+    public EventCallback OnCloseModal { get; set; }
 
     private Produto produto;
     private IEnumerable<Categoria> categorias;
@@ -78,18 +93,24 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        produto = await _produtoService.Get(Int32.Parse(Id));
+        produto = await _produtoService.Get(Id);
         categorias = await _categoriaService.GetAll();
         FeedSubCategorias(produto.IdCategoria);
     }
 
     private async void HandleValidSubmit()
     {
-        var result = await _produtoService.Edit(produto);
-        if (result != null)
+        await OnEditSubmit.InvokeAsync(produto);
+        /*if (result != null)
             NavManager.NavigateTo("/Produtos");
-        else
+            else
             NavManager.NavigateTo("/CadastroProduto");
+    */
+    }
+
+    private async Task CloseModel()
+    {
+        OnCloseModal.InvokeAsync();
     }
 
     private void GetSubcategorias(ChangeEventArgs e)

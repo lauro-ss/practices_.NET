@@ -45,7 +45,8 @@ else
     }
 }
 
-@if(modal){
+@if(modal)
+{
     <div class="modal" tabindex="-1" style="display:block; background: #00000085;">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -65,21 +66,57 @@ else
     </div>
 }
 
+@if (modalEdit)
+{
+    <div class="modal" tabindex="-1" style="display:block; background: #00000085;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Produto</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                </div>
+                   <EditarProduto Id="idProduto" OnEditSubmit="EditSubmit" OnCloseModal="CloseModal"></EditarProduto>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
     [Parameter]
     public IEnumerable<Produto>? data { get; set; } = null;
     private bool modal = false;
+    private bool modalEdit = false;
     private int idProduto = 0;
     private string nomeProduto = "";
 
+    protected async Task EditSubmit (Produto produto)
+    {
+        var result = await _produtoService.Edit(produto);
+        
+        if (result != null)
+        {
+            data = await _produtoService.GetAll();
+            modalEdit = false;
+            idProduto = 0;
+            /*await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });*/
+        }
+    }
+
+
     private async Task EditarProduto(int id)
     {
-        NavManager.NavigateTo($"/EditarProduto/{id}");
+        modalEdit = true;
+        idProduto = id;
+        //NavManager.NavigateTo($"/EditarProduto/{id}");
     }
 
     private async Task CloseModal()
     {
         modal = false;
+        modalEdit = false;
     }
 
     private async Task RemoverProduto(int id, string nome)
@@ -93,12 +130,12 @@ else
     {
         await _produtoService.Delete(idProduto);
         data = await _produtoService.GetAll();
+        modal = false;
+        idProduto = 0;
+        nomeProduto = "";
         await InvokeAsync(() =>
         {
             StateHasChanged();
-            modal = false;
-            idProduto = 0;
-            nomeProduto = "";
         });
     }
 }
