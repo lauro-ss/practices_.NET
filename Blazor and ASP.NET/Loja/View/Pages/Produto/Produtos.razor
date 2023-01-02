@@ -34,7 +34,7 @@ else
                         <td>@item.Valor</td>
                         <td>@item.Status</td>
                         <td>@item.Quantidade</td>
-                        <td>@item.IdCategoria</td>
+                        <td>@item.Categoria</td>
                         <td>@item.Subcategoria</td>
                         <td><button @onclick="() => EditarProduto(item.Id)">Editar</button></td>
                         <td><button @onclick="() => RemoverProduto(item.Id, item.Nome)">Remover</button></td>
@@ -83,7 +83,7 @@ else
 
 @code {
     [Parameter]
-    public IEnumerable<Produto>? data { get; set; } = null;
+    public IEnumerable<ProdutoDTO>? data { get; set; } = null;
     private bool modal = false;
     private bool modalEdit = false;
     private int idProduto = 0;
@@ -95,7 +95,7 @@ else
         
         if (result != null)
         {
-            data = await _produtoService.GetAll();
+            data = await _produtoService.GetAllDTO();
             modalEdit = false;
             idProduto = 0;
             /*await InvokeAsync(() =>
@@ -129,7 +129,7 @@ else
     private async Task RemoverProduto()
     {
         await _produtoService.Delete(idProduto);
-        data = await _produtoService.GetAll();
+        data = await _produtoService.GetAllDTO();
         modal = false;
         idProduto = 0;
         nomeProduto = "";

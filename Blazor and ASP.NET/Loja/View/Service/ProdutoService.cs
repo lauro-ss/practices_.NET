@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.DTOs;
 using System.Net.Http.Json;
 using View.Service.Interfaces;
 
@@ -39,6 +40,11 @@ namespace View.Service
         public async Task<IEnumerable<Produto>> GetAll()
         {
             return await _httpClient.GetFromJsonAsync<IEnumerable<Produto>>("/api/produto");
+        }
+
+        public async Task<IEnumerable<ProdutoDTO>> GetAllDTO()
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<ProdutoDTO>>("/api/produto/GetDTO");
         }
     }
 }

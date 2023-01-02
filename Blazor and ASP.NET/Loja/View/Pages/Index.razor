@@ -18,7 +18,7 @@
 <Produtos data="dataProduto"></Produtos>
 
 @code{
-    private IEnumerable<Core.Produto>? dataProduto { get; set; }
+    private IEnumerable<ProdutoDTO>? dataProduto { get; set; }
     private Core.Produto auxProduto = new Core.Produto();
     private Core.Categoria auxCategoria = new Core.Categoria();
     private IEnumerable<Core.Categoria> auxCategorias { get; set; }
@@ -26,7 +26,7 @@
     public async void HandleValidSubmitProduto()
     {
         var result = await _produtoService.Create(auxProduto);
-        dataProduto = await _produtoService.GetAll();
+        dataProduto = await _produtoService.GetAllDTO();
         auxProduto = new Core.Produto();
         await InvokeAsync(() =>
         {
@@ -52,7 +52,7 @@
     }*/
     protected override async Task OnInitializedAsync()
     {
-        dataProduto = await _produtoService.GetAll();
+        dataProduto = await _produtoService.GetAllDTO();
         auxCategorias = await _categoriaService.GetAll();
     }
 }
