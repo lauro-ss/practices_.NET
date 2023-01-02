@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.DTOs;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,21 @@ namespace LojaAPI.Controllers
         {
             _produtoService = produtoService;
         }
+
+        [HttpGet("GetDTO")]
+        public async Task<ActionResult<IEnumerable<ProdutoDTO>>> GetDTO()
+        {
+            try
+            {
+                return Ok(await _produtoService.GetAllDTO());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Erro interno: {e.Message}");
+            }
+
+        }
+
         // GET: api/<ProdutoController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Produto>>> Get()
