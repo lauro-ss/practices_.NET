@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.DTOs;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,6 +51,22 @@ namespace Service
         public async Task<IEnumerable<Produto>> GetAll()
         {
             return await _dbContext.Produto.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<IEnumerable<ProdutoDTO>> GetAllDTO()
+        {
+            var query = from produto in _dbContext.Produto
+                        select new ProdutoDTO
+                        {
+                            Id = produto.Id,
+                            Nome = produto.Nome,
+                            Valor = produto.Valor,
+                            Status = produto.Status,
+                            Quantidade = produto.Quantidade,
+                            Categoria = produto.Categoria.Nome,
+                            Subcategoria = produto.Subcategoria
+                        };
+            return await query.AsNoTracking().ToListAsync();
         }
     }
 }
