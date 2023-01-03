@@ -13,6 +13,48 @@ else
 {
     @if (data.Any())
     {
+
+        <RadzenDataGrid 
+            Data="data" 
+            TItem="ProdutoDTO" 
+            AllowColumnResize="true" 
+            AllowSorting="true"
+            PageSize="5"
+            AllowPaging="true"
+            AllowAlternatingRows="false"
+            ColumnWidth="200px">
+            <Columns>
+                <RadzenDataGridColumn TItem="ProdutoDTO" Property="Id" Title="ID" Width="80px">
+                    <Template Context="data"> 
+                        <span style="" class="">
+                            @data.Id
+                        </span>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ProdutoDTO" Property="Nome" Title="Nome" Width="120px"/>
+                <RadzenDataGridColumn TItem="ProdutoDTO" Property="Valor" Title="Valor" Width="120px"/>
+                <RadzenDataGridColumn TItem="ProdutoDTO" Property="Status" Title="Status" Width="120px" />
+                <RadzenDataGridColumn TItem="ProdutoDTO" Property="Quantidade" Title="Quantidade" Width="80px" />
+                <RadzenDataGridColumn TItem="ProdutoDTO" Property="Categoria" Title="Categoria" Width="120px" />
+                <RadzenDataGridColumn TItem="ProdutoDTO" Property="Subcategoria" Title="Subcategoria" Width="120px"/>
+                <RadzenDataGridColumn TItem="ProdutoDTO" Width="120px">
+                    <Template Context="data">
+                        <RadzenButton Variant="Variant.Flat" Click="@(() => EditarProduto(@data.Id))" Text="Editar"></RadzenButton>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ProdutoDTO" Width="80px">
+                    <Template Context="data">
+                        <RadzenButton 
+                            Variant="Variant.Text" 
+                            Click="@(() => RemoverProduto(data.Id, data.Nome))" 
+                            Text="X" ButtonStyle="ButtonStyle.Danger">
+                        </RadzenButton>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+
+        @*
         <table>
             <thead>
                 <tr>
@@ -42,6 +84,7 @@ else
                 }
             </tbody>
         </table>
+        *@
     }
 }
 
