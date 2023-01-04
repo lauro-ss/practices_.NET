@@ -11,9 +11,19 @@
 }
 else
 {
+    <div class="col-md-6 col-lg-4 mt-3 mb-2">
+        <RadzenCard>
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">
+                Pesquisar Produto
+                @*<RadzenIcon Icon="find_replace"/> *@
+                <RadzenSpeechToTextButton Change="@(args => OnSpeechCaptured(args))" class="ms-2"/>
+            </RadzenText>
+            <RadzenTextBox Placeholder="Pesquisar..." oninput=@PesquisarProduto Class ="w-100" @bind-Value=@inputValue/>
+            @* <RadzenAutoComplete Placeholder="Pesquisar..." Data=@data TextProperty="Nome" oninput=@PesquisarProduto Style="width: 100%;" /> *@
+        </RadzenCard>
+    </div>
     @if (data.Any())
     {
-
         <RadzenDataGrid 
             Data="data" 
             TItem="ProdutoDTO" 
@@ -34,7 +44,7 @@ else
                 <RadzenDataGridColumn TItem="ProdutoDTO" Property="Nome" Title="Nome" Width="120px"/>
                 <RadzenDataGridColumn TItem="ProdutoDTO" Property="Valor" Title="Valor" Width="120px"/>
                 <RadzenDataGridColumn TItem="ProdutoDTO" Property="Status" Title="Status" Width="120px" />
-                <RadzenDataGridColumn TItem="ProdutoDTO" Property="Quantidade" Title="Quantidade" Width="80px" />
+                <RadzenDataGridColumn TItem="ProdutoDTO" Property="Quantidade" Title="Quantidade" Width="120px" />
                 <RadzenDataGridColumn TItem="ProdutoDTO" Property="Categoria" Title="Categoria" Width="120px" />
                 <RadzenDataGridColumn TItem="ProdutoDTO" Property="Subcategoria" Title="Subcategoria" Width="120px"/>
                 <RadzenDataGridColumn TItem="ProdutoDTO" Width="120px">
@@ -131,23 +141,42 @@ else
     private bool modalEdit = false;
     private int idProduto = 0;
     private string nomeProduto = "";
+    private string inputValue = "";
+
+
+    private async Task OnSpeechCaptured(string speechValue)
+    {
+        inputValue = speechValue;
+        data = data.Where(produto => produto.Nome.ToLower().Contains(speechValue.ToLower())).AsEnumerable();
+    }
 
     protected async Task EditSubmit (Produto produto)
     {
         var result = await _produtoService.Edit(produto);
-        
+
         if (result != null)
         {
             data = await _produtoService.GetAllDTO();
             modalEdit = false;
             idProduto = 0;
             /*await InvokeAsync(() =>
-            {
+                {
                 StateHasChanged();
             });*/
         }
     }
 
+
+    private async Task PesquisarProduto(ChangeEventArgs e)
+    {
+        if(e.Value != string.Empty)
+        {
+            data = data.Where(produto => produto.Nome.ToLower().Contains(e.Value.ToString().ToLower())).AsEnumerable();
+        }else
+        {
+            data = await _produtoService.GetAllDTO();
+        }
+    }
 
     private async Task EditarProduto(int id)
     {
